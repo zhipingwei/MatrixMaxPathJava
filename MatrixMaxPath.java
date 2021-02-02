@@ -1,5 +1,7 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
-public class Main {
+public class MatrixMaxPath {
 	
 	int[][] arr = {
 				{1,  2,  3,  4,  5,  6,  7,  8},				
@@ -53,7 +55,7 @@ public class Main {
 		}
 	}
 		
-		public void printPath(Node node)
+		public void printPath(@NotNull Node node)
         {
         	for (Node it : node.children)
         	{
@@ -66,15 +68,12 @@ public class Main {
         }
 
 	
-	public int numTrail(int i, int j, int pathLength)
+	public int numTrail(Node node)
 	{
-		int a = arr[i][j];
+		int a = node.data.value;
 		
-		Node node = new Node();
-		
-		node.data.x = i;
-		node.data.y = j;
-		node.data.value = a;
+		int i = node.data.x;
+		int j = node.data.y;
 		
 		int maxDepth = 0;
 		Node maxNode = null;
@@ -89,7 +88,7 @@ public class Main {
 			node.children.add(nextNode);
 			nextNode.parent = node;
 					
-			temp = numTrail(i, j+1, pathLength++);
+			temp = numTrail(nextNode);
 			if (temp > maxDepth)
 			{
 				maxDepth = temp;
@@ -106,7 +105,7 @@ public class Main {
 			node.children.add(nextNode);
 			nextNode.parent = node;
 			
-			temp = numTrail(i, j-1, pathLength++);
+			temp = numTrail(nextNode);
 			if (temp > maxDepth)
 			{
 				maxDepth = temp;
@@ -122,7 +121,7 @@ public class Main {
 			node.children.add(nextNode);
 			nextNode.parent = node;
 			
-			temp = numTrail(i+1, j+1, pathLength++);
+			temp = numTrail(nextNode);
 			if (temp > maxDepth)
 			{
 				maxDepth = temp;
@@ -138,7 +137,7 @@ public class Main {
 			node.children.add(nextNode);
 			nextNode.parent = node;
 			
-			temp = numTrail(i-1, j+1, pathLength++);
+			temp = numTrail(nextNode);
 			if (temp > maxDepth)
 			{
 				maxDepth = temp;
@@ -154,7 +153,7 @@ public class Main {
 			node.children.add(nextNode);
 			nextNode.parent = node;
 		
-			temp = numTrail(i+1, j-1, pathLength++);
+			temp = numTrail(nextNode);
 			if (temp > maxDepth)
 			{
 				maxDepth = temp;
@@ -170,7 +169,7 @@ public class Main {
 			node.children.add(nextNode);
 			nextNode.parent = node;
 		
-			temp = numTrail(i-1, j-1, pathLength++);
+			temp = numTrail(nextNode);
 			if (temp > maxDepth)
 			{
 				maxDepth = temp;
@@ -186,7 +185,7 @@ public class Main {
 			node.children.add(nextNode);
 			nextNode.parent = node;
 			
-			temp = numTrail(i+1, j, pathLength++);
+			temp = numTrail(nextNode);
 			if (temp > maxDepth)
 			{
 				maxDepth = temp;
@@ -202,7 +201,7 @@ public class Main {
 			node.children.add(nextNode);
 			nextNode.parent = node;
 			
-			temp = numTrail(i-1, j, pathLength++);
+			temp = numTrail(nextNode);
 			if (temp > maxDepth)
 			{
 				maxDepth = temp;
@@ -216,68 +215,7 @@ public class Main {
 		}
 		return maxDepth + 1;
 	}
-	ArrayList<Integer> a = new ArrayList<Integer>();
-	ArrayList<Integer> b = new ArrayList<Integer>();
-	public void numTrail2(int i, int j, int pathLength, ArrayList<Integer> c)
-	{
-		
-		int a = arr[i][j];
-		if (c.size() == maxPathLength-1)
-		{
-			for (int z = 0; z < c.size(); z++)
-			{
-				b.set(z, c.get(z));
-			}
-		}
 
-		if(j + 1 < MaxColumn && a < arr[i][j+1])
-		{		
-			c.add(arr[i][j+1]);
-			numTrail2(i, j+1, pathLength++, c);
-		}
-		if(j - 1 >= 0 && a < arr[i][j-1])
-		{			
-			c.add(arr[i][j-1]);
-			numTrail2(i, j-1, pathLength++, c);
-		}
-		if(j + 1 < MaxColumn && i + 1 < MaxRow && a < arr[i+1][j+1])
-		{			
-			c.add(arr[i+1][j+1]);
-			numTrail2(i+1, j+1, pathLength++, c);
-		}
-		if(j + 1 < MaxColumn && i - 1 >= 0 && a < arr[i-1][j+1])
-		{		
-			c.add(arr[i-1][j+1]);
-			numTrail2(i-1, j+1, pathLength++, c);
-		}
-		if(i + 1 < MaxRow && j-1 >= 0 && a < arr[i+1][j-1])
-		{		
-			c.add(arr[i+1][j-1]);
-			numTrail2(i+1, j-1, pathLength++, c);
-		}
-		if(j - 1 >= 0 && i - 1 >= 0 && a < arr[i-1][j-1])
-		{		
-			c.add(arr[i-1][j-1]);
-			numTrail2(i-1, j-1, pathLength++, c);
-		}
-		if(i + 1 < MaxRow && a < arr[i+1][j])
-		{			
-			c.add(arr[i+1][j]);
-			numTrail2(i+1, j, pathLength++, c);
-		}
-		if(i - 1 >= 0 && a < arr[i-1][j])
-		{		
-			c.add(arr[i-1][j]);
-			numTrail2(i-1, j, pathLength++,c);
-		}
-
-		//pathLengths.add(pathLength);
-		if(maxPathLength < pathLength)
-		{
-			maxPathLength = pathLength;
-		}
-		//realPaths.add(b);
-	}
 	
 	public Node getNode()
 	{
@@ -286,22 +224,24 @@ public class Main {
 	
 	public static void main(String[] args)
 	{
-		Main bob = new Main();
+		MatrixMaxPath bob = new MatrixMaxPath();
 		HashMap<Node, Integer> result = new HashMap<Node, Integer>();
 		int currentMax = 0;
 		
 		
-		for(; originalI < MaxColumn; originalI++)
+		for(originalI = 0; originalI < MaxColumn; originalI++)
 		{
 			for(originalJ = 0; originalJ < MaxRow; originalJ++)
 			{
 				int depth = 0;
-				
-				depth = bob.numTrail(originalI, originalJ, 1);
-			    Node node = bob.getNode();
+
+				Node node = bob.getNode();
 				node.data.x = originalI;
 				node.data.y = originalJ;
 				node.data.value = bob.arr[originalI][originalJ];
+				
+				depth = bob.numTrail(node);
+
 				
 			    if (depth > currentMax)
 				{
